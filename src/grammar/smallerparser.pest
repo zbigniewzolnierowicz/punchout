@@ -1,0 +1,17 @@
+left_tag_open  = _{ "[" }
+left_tag_close = _{ "]" }
+tag_name       =  { "a" | "image" }
+
+right_tag_open  = _{ "[/" }
+right_tag_close = _{ "]" }
+
+tag_left  = _{ left_tag_open ~ PUSH(tag_name) ~ left_tag_close }
+tag_right = _{ right_tag_open ~ POP ~ right_tag_close }
+
+text        = { (LETTER | WSP)+ }
+tag_content = { tag | text }
+
+tag = { tag_left ~ tag_content ~ tag_right }
+
+WSP    = _{ " " }
+bbcode =  { (tag | text)* }
